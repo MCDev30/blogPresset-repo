@@ -1,0 +1,23 @@
+{
+  "name": "blog-preset",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "vue": "^3.4.15",
+    "vue-router": "^4.2.5",
+    "vue-simple-uploader": "^0.7.6",
+    "vue-upload-component": "^3.1.8",
+    "vue-upload-multiple-image": "^1.1.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.3",
+    "vite": "^5.1.0"
+  }
+}

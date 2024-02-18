@@ -1,0 +1,54 @@
+----------- Project name : Blog Preset ------------
+
+TODO-LIST
+
+    FRONTEND (Delay --> 1sem)
+        - Inscription (nom, prenoms, pseudo, email, tel, photo_profile (facultatif), country, password, password_confirm)
+        - Connexion (email, password)
+        - All pages --> Login-Register, Home, Dashboard(profile),  
+        - Pages functionalities
+            •   Add Post
+            •   Add visibilities on post
+            •   Add followers (default = 0 user) (After login and first post, notification will be send to all others users who notified us that a new user is logged in now)
+            •   Send callback to user (He will be automatically a followers if he accept the invitation)
+            •   Add comments on all posts from our followers
+            •   Add like option on all posts
+            •   Allow shared post on whatsapp, Instagram and Facebook
+            •   Post must be include text, image(convert into b64)
+            •   On Dashboard
+                -   10 last followers
+                -   Add post button
+                -   3 last posts and numbers of like and comments
+                -   Graphics relative to the number of post per month
+                -   Modify the profile information like pseudo, photo_profile and password
+                -   Logout button
+                -   Delete account button
+        -   Technology: Vue Js + Bootstrap
+
+    BACKEND (Delay --> 1sem)
+        -   Routes
+            *   User Account management
+                •   /login                                  
+                •   /register
+                •   /delete_account
+                •   /update_account
+                •   /password_reset
+                •   /password_confirmation (email)
+            
+            *   User Posts management
+                •   /add_post (post: Not null, image)
+                •   /add_comments (comment: not null)
+                •   /delete_post
+                •   /update_post
+                •   /share_post
+            
+            *   Followers action
+                •   /add_follower
+                •   /remove_follower
+                •   /see_follower_profile
+                •   /send_tweet(in perspective --> after)
+        -   Technology: python Flask + SQLAlchemy
+    
+    PRODUCTION
+        -   Frontend deployment --> github pages
+        -   Backend deployment  --> vercel
