@@ -3,11 +3,10 @@ def create_user_table(db):
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS User (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            surname VARCHAR(255) NOT NULL,
-            email VARCHAR(255) NOT NULL UNIQUE,
+            username VARCHAR(255) NOT NULL,
             password BLOB NOT NULL,
-            phone VARCHAR (255) NOT NULL,
+            email VARCHAR(255) NOT NULL UNIQUE,
+            profile BLOB,
             salt BLOB NOT NULL,
             token VARCHAR(2000) NOT NULL,
             active INT NOT NULL,
@@ -18,16 +17,14 @@ def create_user_table(db):
     """)
 
 
-def bank_account_table(db):
+def bank_posts_table(db):
     cursor = db.cursor()
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS Account (
+        CREATE TABLE IF NOT EXISTS Posts (
             id INT AUTO_INCREMENT PRIMARY KEY,
             email VARCHAR(255) NOT NULL,
-            bank VARCHAR(255) NOT NULL,
-            account_number VARCHAR(255) NOT NULL,
-            iban VARCHAR(255) NOT NULL,
-            bic VARCHAR(255) NOT NULL ,
+            post VARCHAR(255) NOT NULL,
+            field_list JSON,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  
         )
