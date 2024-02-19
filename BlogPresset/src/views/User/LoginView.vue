@@ -1,13 +1,114 @@
 <script setup>
-// import HelloWorld from './components/HelloWorld.vue'
-//import test from "./constant/index";
+import { ref } from "vue";
+import base_url from "../../constant/index";
+
+const log_email = ref("");
+const log_password = ref("");
+
+const reg_email =ref('')
+const reg_password =ref('')
+const reg_password_conf =ref('')
+const reg_username =ref('')
+
+const message  = ref("")
+const isTrue = ref("none")
+
+const register = async () => {
+  const data = {
+    username:reg_username.value,
+    password: log_password.value,
+    email: reg_email.value,
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+  if (reg_username.value == "" || reg_password.value == "" || reg_password_conf.value == "" || reg_email.value ==  "") {
+    message.value = "Aucun champ ne doit être vide. Réessayez !"
+    isTrue.value = "danger"
+  } else if ( reg_password.value !== reg_password_conf.value) {
+    message.value = "Les mots de passe ne sont pas conformes "
+    isTrue.value = "danger"
+  } else{
+    try {
+      const response = await fetch(`${base_url}/register`, options);
+      const jsonResponse = await response.json();
+      if (jsonResponse.success) {
+        isTrue.value = "success"
+        message.value = jsonResponse.message
+        window.location.replace('/')
+      } else {
+        isTrue.value = "danger"
+        message.value = jsonResponse.message
+      }
+    } catch (error) {
+      console.error("Erreur lors de la requête :", error);
+      throw error;
+    }
+  }
+}
+
+const login = async () => {
+  const data = {
+    email: log_email.value,
+    password: log_password.value,
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+  try {
+    const response = await fetch(`${base_url}/login`, options);
+    const jsonResponse = await response.json();
+    if (jsonResponse.success) {
+      isTrue.value = "success"
+      message.value = jsonResponse.message
+      sessionStorage.setItem('token', jsonResponse.token)
+      sessionStorage.setItem('email', jsonResponse.user.email)
+      sessionStorage.setItem('username', jsonResponse.user.username)
+      sessionStorage.setItem('profile', jsonResponse.user.profile)
+      sessionStorage.setItem('citation', jsonResponse.user.citation)
+      window.location.replace('/home')
+    } else {
+      isTrue.value = "danger"
+      message.value = jsonResponse.message
+      console.log(jsonResponse)
+    }
+  } catch (error) {
+    console.error("Erreur lors de la requête :", error);
+    throw error;
+  }
+};
 </script>
 
 <template>
   <section class="body">
     <section style="width: 100%; margin: 10px">
+      
       <div class="login-wrap">
         <div class="login-html">
+          <div id="alert" v-if="isTrue == 'danger'">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>{{ message }}</strong>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+          <div id="alert" v-if="isTrue === 'success'">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <strong>{{ message }}</strong>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
           <input
             id="tab-1"
             type="radio"
@@ -20,66 +121,91 @@
             class="tab"
             >Sign Up</label
           >
+          
           <div class="login-form">
             <!-- Login part -->
             <div class="sign-in-htm">
               <br /><br />
-              <div class="group">
-                <label for="user" class="label">Email</label>
-                <input id="user" type="email" class="input" />
-              </div>
-              <div class="group">
-                <label for="pass" class="label">Password</label>
-                <input
-                  id="pass"
-                  type="password"
-                  class="input"
-                  data-type="password"
-                />
-              </div>
-              <br /><br />
-              <div class="group">
-                <input type="submit" class="button" value="Sign In" />
-              </div>
+              <form @submit.prevent="login()">
+                <div class="group">
+                  <label for="user" class="label">Email</label>
+                  <input
+                    id="user"
+                    type="email"
+                    class="input"
+                    v-model="log_email"
+                  />
+                </div>
+                <div class="group">
+                  <label for="pass" class="label">Password</label>
+                  <input
+                    id="pass"
+                    type="password"
+                    class="input"
+                    data-type="password"
+                    v-model="log_password"
+                  />
+                </div>
+                <br /><br />
+                <div class="group">
+                  <input
+                    type="submit"
+                    class="button"
+                    value="Sign In"
+                    style="cursor: pointer"
+                  />
+                </div>
+              </form>
               <div class="hr"></div>
               <div class="foot-lnk">
-                <router-link :to="{ name: 'ResetPassword' }">Forgot Password?</router-link>
+                <router-link :to="{ name: 'ResetPassword' }"
+                  >Forgot Password?</router-link
+                >
               </div>
             </div>
 
             <!-- Register part -->
             <div class="sign-up-htm">
               <br /><br />
-              <div class="group">
-                <label for="user" class="label">Username</label>
-                <input id="user" type="text" class="input" />
-              </div>
-              <div class="group">
-                <label for="pass" class="label">Password</label>
-                <input
-                  id="pass"
-                  type="password"
-                  class="input"
-                  data-type="password"
-                />
-              </div>
-              <div class="group">
-                <label for="pass" class="label">Repeat Password</label>
-                <input
-                  id="pass"
-                  type="password"
-                  class="input"
-                  data-type="password"
-                />
-              </div>
-              <div class="group">
-                <label for="pass" class="label">Email Address</label>
-                <input id="pass" type="email" class="input" />
-              </div>
-              <br />
-              <div class="group">
-                <input type="submit" class="button" value="Sign Up" />
-              </div>
+              <form @submit.prevent="register()">
+                <div class="group">
+                  <label for="user" class="label">Username</label>
+                  <input id="user" type="text" class="input" v-model="reg_username" />
+                </div>
+                <div class="group">
+                  <label for="pass" class="label">Password</label>
+                  <input
+                    id="pass"
+                    type="password"
+                    class="input"
+                    data-type="password"
+                    v-model="reg_password"
+                  />
+                </div>
+                <div class="group">
+                  <label for="pass" class="label">Repeat Password</label>
+                  <input
+                    id="pass"
+                    type="password"
+                    class="input"
+                    data-type="password"
+                    v-model="reg_password_conf"
+                  />
+                </div>
+                <div class="group">
+                  <label for="pass" class="label">Email Address</label>
+                  <input id="pass" type="email" class="input" v-model="reg_email" />
+                </div>
+                <br />
+                <div class="group">
+                  <input
+                    type="submit"
+                    class="button"
+                    value="Sign Up"
+                    style="cursor: pointer"
+                  />
+                </div>
+              </form>
               <div class="hr"></div>
             </div>
           </div>
@@ -95,8 +221,8 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  color:#6a6f8c;
-  font:600 16px/18px 'Open Sans',sans-serif;
+  color: #6a6f8c;
+  font: 600 16px/18px "Open Sans", sans-serif;
 }
 *,
 :after,

@@ -7,6 +7,7 @@ import Login from './views/User/LoginView.vue';
 import ForgotPassword from './views/User/Password/ForgotPassword.vue'
 import Step2 from './views/User/Password/Step2View.vue'
 import SetPassword from './views/User/Password/SetPasswordView.vue'
+import profileView from './views/Profile/profileView.vue'
 
 
 
@@ -20,7 +21,7 @@ const router = createRouter({
     { path: '/reset_password/step1', name:"ResetPassword", component: ForgotPassword},
     { path: '/reset_password/step2', name:"ResetPasswordStep2", component: Step2},
     { path: '/reset_password/step3', name:"SetPassword", component: SetPassword},
-
+    { path: '/profile', name:"Profile", component: profileView},
 
   ]
 })

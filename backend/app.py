@@ -1,4 +1,4 @@
-from models import create_user_table, bank_account_table,create_cheque_table
+from models import create_user_table,create_posts_table
 from flask_jwt_extended import JWTManager
 from flask import Flask
 from flask_cors import CORS
@@ -21,13 +21,12 @@ if __name__ == "__main__":
     db = mysql.connector.connect(
         host=os.getenv('HOST'),
         port=os.getenv('PORT'),
-        user=os.getenv('name'),
+        user=os.getenv('USERNAME'),
         password=os.getenv('PASSWORD'),
         database=os.getenv('DB_NAME')
     )
     create_user_table(db=db)
-    bank_account_table(db=db)
-    create_cheque_table(db=db)
+    create_posts_table(db=db)
     authentication(app=app, db=db)
     bank_session(app=app, db=db)
     check_session(app=app, db=db)

@@ -1,6 +1,3 @@
-const test = "HELLO WORLD"
-const test2 = "HELLO WORLD 2"
+const base_url = "http://127.0.0.1:8000"
 
-export default {
-    test, test2
-}
+export default base_url

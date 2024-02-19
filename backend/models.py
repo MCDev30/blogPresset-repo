@@ -12,12 +12,13 @@ def create_user_table(db):
             active INT NOT NULL,
             code VARCHAR(255),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            Citation VARCHAR(255)
         )
     """)
 
 
-def bank_posts_table(db):
+def create_posts_table(db):
     cursor = db.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Posts (
@@ -27,23 +28,5 @@ def bank_posts_table(db):
             field_list JSON,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  
-        )
-    """)
-
-
-def create_cheque_table(db):
-    cursor = db.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS Cheque (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            email VARCHAR(255) NOT NULL,
-            bank_name VARCHAR(255) NOT NULL,
-            nom VARCHAR(255) NOT NULL,
-            surname VARCHAR(255) NOT NULL,
-            montant VARCHAR(255) NOT NULL,
-            objet VARCHAR(255),
-            expire VARCHAR(255),
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )
     """)

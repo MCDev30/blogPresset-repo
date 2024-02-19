@@ -1,12 +1,15 @@
 <template>
-  <section>
+  <section id="cartes">
   <div class="carte">
     <div class="topcarte"></div>
-    <img id="profile" src="../../assets/profil.png" alt="" width="90" />
+    <img v-if="profile === 'null'" id="profile" src="../../assets/profil.png" alt="" width="90" style="margin-right:100px"/>
+    <img v-else :src="profile" alt="" width="90">
     <div class="bottomcarte">
-      <h2>@John Doe</h2>
-      <p id="email">test@gmail.com</p>
-      <p id="citation">"Lorem ipsum dolor sit amet consectetur"</p>
+      <h2>@{{ username }}</h2>
+      <p id="email">{{email}}</p>
+      <p id="citation" v-if="citation !== 'null'">{{ citation }}</p>
+      <p id="citation"></p>
+
     </div>
     <hr />
     <p style="height:2px"></p>
@@ -26,10 +29,12 @@
     </div>
     <hr />
     <div class="buttons">
-      <div class="update">
-        <img src="../../assets/update.png" alt="" width="17" />
-        <p>Update profile</p>
-      </div>
+      <router-link to="/profile">
+        <div class="update">
+          <img src="../../assets/update.png" alt="" width="17" />
+          <p>Update profile</p>
+        </div>
+      </router-link>
       <div class="addPost" data-toggle="modal" data-target="#addPost">
         <img src="../../assets/plus.png" alt="" width="17" />
         <p>Add new post</p>
@@ -125,7 +130,13 @@ data() {
         { id: 3, foll: "Scarlet Johanson"},
         { id: 4, foll: "Bill GATES"},
         { id: 5, foll: "Josh BROLLIN"}
-      ]
+      ],
+      username : sessionStorage.getItem('username'),
+      email : sessionStorage.getItem('email'),
+      token : sessionStorage.getItem('token'),
+      profile : sessionStorage.getItem('profile'),
+      citation : sessionStorage.getItem('citation')
+
     };
   },
   methods: {
@@ -156,21 +167,13 @@ data() {
   }
 }
 
-// const data = [
-//   { id: 1, post: "Lorem ipsum dolor sit amets...", like: 10 },
-//   { id: 2, post: "Lorem ipsum dolor sit amet...", like: 30 },
-//   { id: 3, post: "Ipsum dolor sit amet...", like: 13 },
-// ];
-// const followers = [
-//   { id: 1, foll: "Bill GATES"},
-//   { id: 2, foll: "Josh BROLLIN"},
-//   { id: 3, foll: "Scarlet Johanson"},
-//   { id: 4, foll: "Bill GATES"},
-//   { id: 5, foll: "Josh BROLLIN"}
-// ];
 </script>
 
 <style>
+#cartes{
+  height: 91vh;
+  overflow: hidden;
+}
 #clear{
   position: absolute;
   top: 241px;
@@ -222,6 +225,9 @@ data() {
   width: 150px;
   font-weight: bold;
   border-radius: 5px;
+}
+.carte{
+  height: 88vh;
 }
 .carte, .carte2{
   /* width: 20%; */
@@ -322,8 +328,9 @@ hr {
   color: #fff;
 }
 .carte2{
-  height: 150px;
+  height: 186px;
   overflow-y: scroll;
+  display: none;
 }
 .titre{
   display: flex;

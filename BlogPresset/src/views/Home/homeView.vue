@@ -1,13 +1,19 @@
 <script setup>
+
+import base_url from '../../constant/index'
 import AppMenu from "../../components/AppMenu.vue";
 import LeftSideView from "../../components/home/LeftSideView.vue";
 import RightSideView from "../../components/home/RightSideView.vue";
-// import test from "./constant/index";
-// const tes = test.test;
+
+const username = sessionStorage.getItem('username')
+const email = sessionStorage.getItem('email')
+const token = sessionStorage.getItem('token')
+const profile = sessionStorage.getItem('profile')
+
 
 const articles = [
   {
-    id:1,
+    id: 1,
     author: "@Pseudo1",
     post: "When referring to article,it can have different meanings depending on the context. In general, it can signify a piece of writing in a newspaper, magazine, or online publication, as defined in the Cambridge English Dictionar",
     citation: "lorem ipsum dolor...",
@@ -18,7 +24,7 @@ const articles = [
     ],
   },
   {
-    id:2,
+    id: 2,
     author: "@Mélène TONOU",
     post: "When referring to article,it can have different meanings depending on the context. In general, it can signify a piece of writing in a newspaper, magazine, or online publication, as defined in the Cambridge English Dictionar",
     citation: "lorem ipsum dolor...",
@@ -28,7 +34,7 @@ const articles = [
     ],
   },
   {
-    id:3,
+    id: 3,
     author: "@Mélène TONOU",
     post: "When referring to article,it can have different meanings depending on the context. In general, it can signify a piece of writing in a newspaper, magazine, or online publication, as defined in the Cambridge English Dictionar",
     citation: "lorem ipsum dolor...",
@@ -37,13 +43,14 @@ const articles = [
     ],
   },
   {
-    id:4,
+    id: 4,
     author: "@Mélène TONOU",
     post: "When referring to article,it can have different meanings depending on the context. In general, it can signify a piece of writing in a newspaper, magazine, or online publication, as defined in the Cambridge English Dictionar",
     citation: "lorem ipsum dolor...",
     image: [],
   },
 ];
+
 </script>
 
 <template>
@@ -57,55 +64,58 @@ const articles = [
           <div class="article">
             <div class="author">
               <div class="image">
-                <img src="../../assets/profil.png" alt="" width="50" style="margin-top:-6px">
+                <img
+                  src="../../assets/profil.png"
+                  alt=""
+                  width="50"
+                  style="margin-top: -6px"
+                />
               </div>
               <div class="userInfo">
                 <h2>@Pseudo{{ article.id }}</h2>
                 <p>{{ article.citation }}</p>
               </div>
             </div>
-              <div class="userPost">
-                <p>{{ article.post }}</p>
+            <div class="userPost">
+              <p>{{ article.post }}</p>
+            </div>
+            <div class="userPostImage">
+              <div v-if="article.image.length === 1" class="oneImage">
+                <img :src="article.image[0]" alt="" />
               </div>
-              <div class="userPostImage">
-                <div v-if="article.image.length === 1" class="oneImage">
-                  <img :src="article.image[0]" alt="">
-                </div>
-                <div v-if="article.image.length === 2" class="twoImage">
-                  <img :src="article.image[0]" alt="">
-                  <img :src="article.image[1]" alt="">
-                </div>
-                <div v-if="article.image.length === 3" class="threeImage">
-                  <img id="one" :src="article.image[0]" alt="">
-                  <div>
-                  <img id="two" :src="article.image[1]" alt=""> <br>
-                  <img id="three" :src="article.image[2]" alt="">
-                  </div>
+              <div v-if="article.image.length === 2" class="twoImage">
+                <img :src="article.image[0]" alt="" />
+                <img :src="article.image[1]" alt="" />
+              </div>
+              <div v-if="article.image.length === 3" class="threeImage">
+                <img id="one" :src="article.image[0]" alt="" />
+                <div>
+                  <img id="two" :src="article.image[1]" alt="" /> <br />
+                  <img id="three" :src="article.image[2]" alt="" />
                 </div>
               </div>
+            </div>
 
-              <div class="reactions">
-                <div id="pouce">
-                  <img src="../../assets/like.png" alt="" width="22">
-                  <img src="../../assets/share.png" alt="" width="22">
-                  <img src="../../assets/messager.png" alt="" width="22">
-                </div>
-                <div class="all">
-                  <p>All comments</p>
-                </div>
+            <div class="reactions">
+              <div id="pouce">
+                <img src="../../assets/like.png" alt="" width="22" />
+                <img src="../../assets/share.png" alt="" width="22" />
+                <img src="../../assets/messager.png" alt="" width="22" />
               </div>
-            
+              <div class="all">
+                <p>All comments</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
       <RightSideView />
     </section>
-
     <router-view />
   </section>
 </template>
 
-<style>
+<style scoped>
 #corps {
   display: flex;
   width: 100%;
@@ -121,69 +131,73 @@ const articles = [
   color: #000;
   border-radius: 10px;
 }
-.article{
+.article {
   padding: 20px;
   margin: 20px;
   border: 1px solid #d7d7d7;
   border-radius: 10px;
 }
-.author{
+.author {
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
-.userInfo h2{
+.userInfo h2 {
   margin-left: 10px;
   font-size: 15px;
   margin-top: -3px;
 }
-.userInfo p{
+.userInfo p {
   font-size: 12px;
   margin-top: -10px;
   margin-left: 10px;
 }
-.userPost p{
+.userPost p {
   text-align: justify;
   font-size: 15px;
 }
-.threeImage, .oneImage, .twoImage{
+.threeImage,
+.oneImage,
+.twoImage {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-#one{
+#one {
   width: 260px;
   margin-right: 40px;
   margin-bottom: 20px;
 }
-#two, #three{
+#two,
+#three {
   width: 120px;
   margin-left: 40px;
   margin-bottom: 20px;
-
 }
-.twoImage img, .oneImage img{
+.twoImage img,
+.oneImage img {
   width: 120px;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
 }
-.reactions{
+.reactions {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-#pouce img{
+#pouce img {
   margin-right: 40px;
   cursor: pointer;
 }
-.all p{
+.all p {
   cursor: pointer;
   color: rgb(98, 98, 220);
 }
 
-#pouce img:hover, .all p:hover{
-  opacity: .5;
+#pouce img:hover,
+.all p:hover {
+  opacity: 0.5;
   color: #787878;
 }
 </style>

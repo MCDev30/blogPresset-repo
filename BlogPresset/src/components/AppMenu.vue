@@ -1,13 +1,44 @@
 <script setup>
+import { ref } from "vue";
+import base_url from "../constant";
 defineProps({
   act: Number,
 });
+
+const error = ref("")
+
+const logout = async () => {
+  const data = {
+    email: sessionStorage.getItem('email'),
+    token: sessionStorage.getItem('token')
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+  try {
+    const response = await fetch(`${base_url}/logout`, options);
+    const jsonResponse = await response.json();
+    if (jsonResponse.status === 200) {
+      sessionStorage.clear()
+      window.location.replace('/')
+    } else {
+      error.value = jsonResponse.message
+    }
+  } catch (error) {
+    console.error("Erreur lors de la requête :", error);
+    throw error;
+  }
+};
 </script>
 
 <template>
   <section id="menus">
     <div class="log">
-      <div class="avata" style="cursor:pointer;">
+      <div class="avata" style="cursor: pointer">
         <h4>BP</h4>
       </div>
       <div class="search">
@@ -18,30 +49,86 @@ defineProps({
 
     <div class="menu_lin">
       <ul>
-        <li :class="[act == 1 ? 'activ' : '']">
-          <img src="../assets/home.png" alt="" width="25" />
-        </li>
-        <!-- <li :class="[act == '2' ? 'active' : '']">
-          <img src="../assets/messager.png" alt="" width="25" style="opacity:.6;" />
-        </li> -->
-        <li :class="[act == 2 ? 'activ' : '']">
-          <img src="../assets/cloche.png" alt="" width="25" />
-        </li>
-        <li :class="[act == 3 ? 'activ' : '']">
-          <img src="../assets/utilisateur.png" alt="" width="25" />
-        </li>
+        <router-link to="/home">
+          <li :class="[act == 1 ? 'activ' : '']">
+            <img src="../assets/home.png" alt="" width="25" />
+          </li>
+        </router-link>
+
+        <router-link to="/">
+          <li :class="[act == 2 ? 'activ' : '']">
+            <img src="../assets/cloche.png" alt="" width="25" />
+          </li>
+        </router-link>
+
+        <router-link to="/profile">
+          <li :class="[act == 3 ? 'activ' : '']">
+            <img src="../assets/utilisateur.png" alt="" width="25" />
+          </li>
+        </router-link>
       </ul>
     </div>
 
     <div class="separator"></div>
+    <router-link to="/">
+      <div class="dashboard">
+        <img src="../assets/tableau-de-bord.png" alt="" width="30" />
+      </div>
+    </router-link>
 
-    <div class="dashboard">
-      <img src="../assets/tableau-de-bord.png" alt="" width="30" />
+    <div data-toggle="modal" data-target="#exampleModal">
+      <div
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Se déconnecter"
+        style="margin-left: 50px; cursor: pointer"
+      >
+        <img src="../assets/logout.png" alt="" width="30" />
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Blog Presset</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" v-if="error === ''">
+            Voulez-vous vraiment vous déconnecter ? <br />Confirmez pour vous
+            déconnecter
+          </div>
+          <div class="modal-body" v-else>
+            {{ error }}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="logout">
+              Se déconnecter
+            </button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">
+              Annuler
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </template>
-
-
 
 <style>
 #menus {
@@ -55,7 +142,6 @@ defineProps({
 }
 .activ {
   border-bottom: 4px solid rgb(98, 98, 220);
-  /* border-radius: 10px; */
   padding-bottom: 6px;
 }
 .log {
@@ -113,7 +199,7 @@ defineProps({
 }
 .menu_lin li:hover {
   border-bottom: 2px solid rgb(129, 129, 129);
-  opacity: .6;
+  opacity: 0.6;
   padding-bottom: 6px;
 }
 .separator {
