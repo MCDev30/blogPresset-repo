@@ -51,3 +51,5 @@
 # phone_number = "+22953870071"
 # message = "Bonjour, comment vas-tu ?"
 # pywhatkit.sendwhatmsg(phone_number, message, 18,59)
+a = list("charbelzeus")
+print('"'+str(a)+'"')

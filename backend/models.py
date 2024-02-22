@@ -17,7 +17,6 @@ def create_user_table(db):
         )
     """)
 
-
 def create_posts_table(db):
     cursor = db.cursor()
     cursor.execute("""
@@ -25,7 +24,7 @@ def create_posts_table(db):
             id INT AUTO_INCREMENT PRIMARY KEY,
             email VARCHAR(255) NOT NULL,
             post VARCHAR(255) NOT NULL,
-            field_list JSON,
+            image_list BLOB,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  
         )

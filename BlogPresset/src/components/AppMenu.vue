@@ -24,6 +24,7 @@ const logout = async () => {
     const jsonResponse = await response.json();
     if (jsonResponse.status === 200) {
       sessionStorage.clear()
+      error.value = jsonResponse.message
       window.location.replace('/')
     } else {
       error.value = jsonResponse.message

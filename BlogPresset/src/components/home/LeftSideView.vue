@@ -43,6 +43,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="addPost" tabindex="-1" role="dialog" aria-labelledby="addPostCentertitre" aria-hidden="true">
+
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content" >
           <div class="modal-header">
@@ -51,10 +52,16 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
+          <div v-if="message !== ''" class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>{{ message }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
           <div class="modal-body">
             <div class="postArea">
               <p style="font-size:13px; margin-bottom:0px">Your article here</p>
-              <textarea id="tArea" rows="7"></textarea>
+              <textarea id="tArea" rows="7" v-model="post"></textarea>
             </div>
             <div class="imageFac">
               <div id="app" class="container my-3">
@@ -84,59 +91,41 @@
               </div>
             </div>
           </div>
+
+
+
           <div class="modal-footer">
-            <button id="addPostButtton">Add post</button>
+            <button id="addPostButtton" @click="addPost">Add post</button>
           </div>
         </div>
       </div>
     </div>
-
-  </div>
-
-  <div class="carte2">
-    <div class="titre">
-      <img src="../../assets/follow-up.png" alt="" width="25">
-      <h2 style="padding:8px">My followers</h2>
-    </div>
-    <hr>
-    <div class="followers" v-for="follower in followers" :key="follower.id">
-      <div class="follower">
-        <div>
-          <img src="https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png" alt="" width="50">
-          <span>{{ follower.foll }}</span>
-        </div>
-          <img src="../../assets/details.png" alt="" width="20" align="center" style="cursor:pointer; margin-top:-5px">
-      </div>
-    </div>
-  </div>
+</div>
   </section>
 </template>
 
 <script>
+import base_url from '../../constant';
 export default {
-data() {
+  data() {
     return {
+      base_url:base_url,
       preview: null,
       image: null,
+      image_list:[],
+      post:"",
       preview_list: [],
-      image_list: [],
       data:[
         { id: 1, post: "Lorem ipsum dolor sit amets...", like: 10 },
-        { id: 2, post: "Lorem ipsum dolor sit amet...", like: 30 },
-        { id: 3, post: "Ipsum dolor sit amet...", like: 13 },
-      ],followers:[
-        { id: 1, foll: "Bill GATES"},
-        { id: 2, foll: "Josh BROLLIN"},
-        { id: 3, foll: "Scarlet Johanson"},
-        { id: 4, foll: "Bill GATES"},
-        { id: 5, foll: "Josh BROLLIN"}
+        { id: 2, post: "Lorem ipsum dolor sit amets...", like: 30 },
+        { id: 3, post: "Ipsum dolor sit amets...", like: 13 },
       ],
       username : sessionStorage.getItem('username'),
       email : sessionStorage.getItem('email'),
       token : sessionStorage.getItem('token'),
       profile : sessionStorage.getItem('profile'),
-      citation : sessionStorage.getItem('citation')
-
+      citation : sessionStorage.getItem('citation'),
+      message :""
     };
   },
   methods: {
@@ -152,10 +141,8 @@ data() {
           }
           this.image_list.push(input.files[index]);
           reader.readAsDataURL(input.files[index]);
-          console.log(this.all_images)
           index ++;
         }
-        console.log(this.preview_list)
       }
     },
     reset: function() {
@@ -163,6 +150,40 @@ data() {
       this.preview = null;
       this.image_list = [];
       this.preview_list = [];
+    },
+    addPost:function() {
+      const images = []
+      this.preview_list.forEach(image => {
+        images.push(image)
+      });
+      if (images.length > 3) {
+        this.message = "Sélectionnez au plus 3 images !"
+        this.reset()
+      } else{
+        const data = {
+          email:sessionStorage.getItem('email'),
+          post: this.post,
+          image_list: images,
+        };
+        const options = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // body: JSON.stringify(data),
+        };
+        fetch(`${this.base_url}/posts/${data.email}`, options)
+        .then(response => response.json())
+        .then(jsonData => {
+          console.log(images[0]);
+          console.log(jsonData); 
+        })
+        .catch(error => {
+          console.log('Error:', error);
+          console.log(data);
+
+        });
+      }
     }
   }
 }

@@ -2,8 +2,7 @@ from models import create_user_table,create_posts_table
 from flask_jwt_extended import JWTManager
 from flask import Flask
 from flask_cors import CORS
-from bank_account import bank_session
-from cheque_emission import check_session
+from posts import posts_session
 from verification import verification_session
 from auth import authentication
 from dotenv import load_dotenv
@@ -28,7 +27,6 @@ if __name__ == "__main__":
     create_user_table(db=db)
     create_posts_table(db=db)
     authentication(app=app, db=db)
-    bank_session(app=app, db=db)
-    check_session(app=app, db=db)
+    posts_session(app=app, db=db)
     verification_session(app=app, db=db)
     app.run(debug=True, load_dotenv=True, port=8000)
