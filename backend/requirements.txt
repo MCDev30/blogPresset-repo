@@ -4,3 +4,4 @@ flask_cors
 mysql-connector-python
 bcrypt
 smtplib
+

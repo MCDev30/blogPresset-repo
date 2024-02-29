@@ -2,7 +2,7 @@ from flask_jwt_extended import JWTManager, create_access_token
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import mysql.connector
-import smtplib
+# import smtplib
 import bcrypt
 
 app = Flask(__name__)
@@ -465,45 +465,45 @@ def comments_session(app, db):
 
 
 #################------------- Verification start -------------#################
-def verification_session(app, db):
-    @app.route("/send_email", methods=["POST"])
-    def send_verification_email():
-        from email.message import EmailMessage
-        email = request.json.get('email') 
-        cursor = db.cursor()
-        cursor.execute("SELECT code FROM User WHERE email = %s", (email,))
-        code = cursor.fetchone()[0]
-        smtp_server = "smtp.gmail.com"
-        port = 587
-        username = 'charbelzmk@gmail.com'
-        password = 'afjk hkpv onzl oxuj'
-        msg = EmailMessage()
-        msg['From'] = 'E-CHECK Admin@panel'
-        msg['To'] = email
-        msg['Subject'] = ' '
-        msg.set_content(
-            f"Code de verification\n\n\t{code}")
-        try:
-            server = smtplib.SMTP(smtp_server, port)
-            server.starttls()
-            server.login(username, password)
-            server.send_message(msg)
-            server.quit()
-            data = {"message": "Email envoye avec succes !","status": 200,"success": True}
-            return jsonify(data)
-        except Exception as e:
-            data = {"message": "Email non envoyé !","status": 200,"success": False}
-            return jsonify(data)
+# def verification_session(app, db):
+#     @app.route("/send_email", methods=["POST"])
+#     def send_verification_email():
+#         from email.message import EmailMessage
+#         email = request.json.get('email') 
+#         cursor = db.cursor()
+#         cursor.execute("SELECT code FROM User WHERE email = %s", (email,))
+#         code = cursor.fetchone()[0]
+#         smtp_server = "smtp.gmail.com"
+#         port = 587
+#         username = 'charbelzmk@gmail.com'
+#         password = 'afjk hkpv onzl oxuj'
+#         msg = EmailMessage()
+#         msg['From'] = 'Blog Presset Admin@panel'
+#         msg['To'] = email
+#         msg['Subject'] = ' '
+#         msg.set_content(
+#             f"Code de verification\n\n\t{code}")
+#         try:
+#             server = smtplib.SMTP(smtp_server, port)
+#             server.starttls()
+#             server.login(username, password)
+#             server.send_message(msg)
+#             server.quit()
+#             data = {"message": "Email envoye avec succes !","status": 200,"success": True}
+#             return jsonify(data)
+#         except Exception as e:
+#             data = {"message": "Email non envoyé !","status": 200,"success": False}
+#             return jsonify(data)
     
-    @app.route("/verify_email/<email>/<code>", methods=["GET"])
-    def verify_code(email, code):
-        cursor = db.cursor()
-        cursor.execute("SELECT code FROM User WHERE email = %s", (email,))
-        code_from_db = cursor.fetchone()[0]
-        if str(code) == str(code_from_db):
-            return jsonify({"success":True, "message":"Correct code", "status":200})
-        else:
-            return jsonify({"success":False, "message":"Incorrect code", "status":200})
+#     @app.route("/verify_email/<email>/<code>", methods=["GET"])
+#     def verify_code(email, code):
+#         cursor = db.cursor()
+#         cursor.execute("SELECT code FROM User WHERE email = %s", (email,))
+#         code_from_db = cursor.fetchone()[0]
+#         if str(code) == str(code_from_db):
+#             return jsonify({"success":True, "message":"Correct code", "status":200})
+#         else:
+#             return jsonify({"success":False, "message":"Incorrect code", "status":200})
 #################------------- Verification end -------------#################
 
 if __name__ == "__main__":
@@ -520,5 +520,8 @@ if __name__ == "__main__":
     authentication(app=app, db=db)
     posts_session(app=app, db=db)
     comments_session(app=app, db=db)
-    verification_session(app=app, db=db)
-    app.run(debug=True, load_dotenv=True, port=8000)
+    #verification_session(app=app, db=db)
+    
+    
+    
+    app.run(debug=True, port=8000)
