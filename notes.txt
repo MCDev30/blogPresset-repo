@@ -40,13 +40,13 @@ TODO-LIST
                 •   /add_comments (comment: not null)
                 •   /delete_post
                 •   /update_post
-                •   /share_post
             
             *   Followers action
                 •   /add_follower
                 •   /remove_follower
                 •   /see_follower_profile
                 •   /send_tweet(in perspective --> after)
+
         -   Technology: python Flask + SQLAlchemy
     
     PRODUCTION
