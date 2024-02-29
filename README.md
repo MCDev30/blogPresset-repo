@@ -1,4 +1,4 @@
-# BlogPresset backend API
+# BlogPresset API --- Backend folder
 
 This API is built using Flask and MySQL for a simple blogging platform called BlogPresset. It includes functionalities for user management, posting, commenting, and email verification.
 
@@ -52,5 +52,8 @@ This API is built using Flask and MySQL for a simple blogging platform called Bl
 ## Author
 
 - Charbel MAMLANKOU, a student in the 4th year of engineering cycle at the National School of Mathematical and Modeling Engineering.
+
+
+# BlogPresset frontend --- BlogPresset folder
 
 Feel free to contribute to this project by submitting a pull request!
