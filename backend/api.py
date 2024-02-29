@@ -475,10 +475,10 @@ def verification_session(app, db):
         code = cursor.fetchone()[0]
         smtp_server = "smtp.gmail.com"
         port = 587
-        username = 'charbelzmk@gmail.com'
-        password = 'afjk hkpv onzl oxuj'
+        username = 'your@gmail.com'
+        password = 'your password'
         msg = EmailMessage()
-        msg['From'] = 'E-CHECK Admin@panel'
+        msg['From'] = 'put your title here'
         msg['To'] = email
         msg['Subject'] = ' '
         msg.set_content(
