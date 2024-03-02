@@ -50,5 +50,5 @@ TODO-LIST
         -   Technology: python Flask + SQLAlchemy
     
     PRODUCTION
-        -   Frontend deployment --> github pages
-        -   Backend deployment  --> vercel
+        -   Frontend deployment --> vercel
+        -   Backend deployment  --> pythonanywhere

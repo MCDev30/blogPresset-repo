@@ -1,7 +1,27 @@
-# Vue 3 + Vite
+# BlogPresset
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+BlogPresset is a web application that allows users to create and share blog posts. It provides functionalities for creating, updating, and deleting posts, as well as adding, updating, and deleting comments on posts.
 
-## Recommended IDE Setup
+## Features
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+- User authentication
+- Create, update, and delete blog posts
+- Add, update, and delete comments on posts
+- View all comments on a specific post
+
+## Technologies Used
+
+- Python
+- Flask
+- MySQL
+- Vue.js
+- CSS
+
+## Setup
+
+1. Clone the repository.
+2. Install the required dependencies using `npm install or yarn intall`.
+3. Set up a vue js configuration in `BlogPresset`.
+4. Run the app  using `npm run dev`.
+
+

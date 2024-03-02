@@ -1,4 +1,34 @@
-# BlogPresset API --- Backend folder
+# BlogPresset
+
+- Demo link: 
+
+# Frontend --- BlogPresset folder
+
+BlogPresset is a web application that allows users to create and share blog posts. It provides functionalities for creating, updating, and deleting posts, as well as adding, updating, and deleting comments on posts.
+
+## Features
+
+- User authentication
+- Create, update, and delete blog posts
+- Add, update, and delete comments on posts
+- View all comments on a specific post
+
+## Technologies Used
+
+- Python
+- Flask
+- MySQL
+- Vue.js
+- CSS
+
+## Setup
+
+1. Clone the repository.
+2. Install the required dependencies using `npm install or yarn intall`.
+3. Set up a vue js configuration in `BlogPresset`.
+4. Run the app  using `npm run dev`.
+
+# Backend --- Backend folder
 
 This API is built using Flask and MySQL for a simple blogging platform called BlogPresset. It includes functionalities for user management, posting, commenting, and email verification.
 
@@ -52,8 +82,5 @@ This API is built using Flask and MySQL for a simple blogging platform called Bl
 ## Author
 
 - Charbel MAMLANKOU, a student in the 4th year of engineering cycle at the National School of Mathematical and Modeling Engineering.
-
-
-# BlogPresset frontend --- BlogPresset folder
 
 Feel free to contribute to this project by submitting a pull request!
