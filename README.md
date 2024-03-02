@@ -24,7 +24,7 @@ BlogPresset is a web application that allows users to create and share blog post
 ## Setup
 
 1. Clone the repository.
-2. Install the required dependencies using `npm install or yarn intall`.
+2. Install the required dependencies using `npm install or yarn install`.
 3. Set up a vue js configuration in `BlogPresset`.
 4. Run the app  using `npm run dev`.
 
