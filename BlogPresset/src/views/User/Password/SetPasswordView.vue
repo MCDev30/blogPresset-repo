@@ -1,6 +1,35 @@
 <script setup>
-// import HelloWorld from './components/HelloWorld.vue'
-//import test from "./constant/index";
+import { ref } from 'vue';
+import base_url from '../../../constant';
+const new_pass = ref('')
+const setPass = () => {
+  const resetPassword = async () => {
+    const data = {
+      email: sessionStorage.getItem('password_email'),
+      password: new_pass.value,
+    };
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    try {
+      const response = await fetch(`${base_url}/reset-password`, options);
+      const jsonResponse = await response.json();
+      if (jsonResponse.success) {
+        alert(jsonResponse.message)
+        window.location.replace('/')
+      }
+    } catch (error) {
+      console.error("Error during request:", error);
+      throw error;
+    }
+  }
+  resetPassword()
+  //console.log(new_pass.value,sessionStorage.getItem('password_email'))
+}
 </script>
 
 <template>
@@ -23,19 +52,19 @@
               <br/><br />
               <div class="group">
                 <label for="user" class="label">Set new password</label>
-                <input id="user" type="password" class="input" />
+                <input id="user" type="password" class="input" v-model="new_pass" />
               </div>
 
               <div class="group">
                 <label for="user" class="label">Confirm password</label>
-                <input id="user" type="password" class="input" />
+                <input id="user" type="password" class="input" v-model="new_pass" disabled/>
               </div>
 
 
               </div>
               <br /><br />
               <div class="group">
-                <input type="submit" class="button" value="Next" />
+                <input type="submit" class="button" value="Next" @click="setPass"/>
               </div>
               <div class="hr"></div>
               <div class="foot-lnk">

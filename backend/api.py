@@ -2,6 +2,7 @@ from flask_jwt_extended import JWTManager, create_access_token
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import mysql.connector
+import random
 import bcrypt
 
 app = Flask(__name__)
@@ -37,7 +38,7 @@ def create_posts_table(db):
         CREATE TABLE IF NOT EXISTS Posts (
             id INT AUTO_INCREMENT PRIMARY KEY,
             email VARCHAR(255) NOT NULL,
-            post VARCHAR(255) NOT NULL,
+            post TEXT NOT NULL,
             image_1 TEXT,
             image_2 TEXT,
             image_3 TEXT,
@@ -302,57 +303,58 @@ def change_password():
     else:
         return jsonify({"success": False, "message": "Cet utilisateur n'existe pas. Inscrivez-vous!", "status": 404})
 
-    # supprimer un compte
-    @app.route('/delete-account', methods=["DELETE"])
-    def delete_user_account():
-        email = request.json.get('email', None)
-        token = request.json.get('token', None)
-        cursor = db.cursor()
-        cursor.execute(
+# supprimer un compte
+@app.route('/delete-account', methods=["DELETE"])
+def delete_user_account():
+    email = request.json.get('email', None)
+    token = request.json.get('token', None)
+    cursor = db.cursor()
+    cursor.execute(
             "DELETE FROM User WHERE email = %s AND token = %s", (email, token))
-        db.commit()
-        return jsonify({"message": "L'utilisateur avec l'email = " + email + ' est supprimé avec succès', "status": 200})
+    cursor.execute("DELETE FROM Comments WHERE comment_email = %s", (email,))
+    cursor.execute("DELETE FROM Posts WHERE email = %s", (email,))
+    db.commit()
+    return jsonify({"message": "L'utilisateur avec l'email = " + email + ' est supprimé avec succès', "status": 200})
 
-    # update account
+# update account
 
-    @app.route('/update_profile', methods=["POST"])
-    def update_user():
-        username = request.json.get('username', None)
-        email = request.json.get('email', None)
-        profile = request.json.get('profile', None)
-        cursor = db.cursor()
-        if username is not None and profile is not None:
-            cursor.execute(
-                "UPDATE User SET username = %s, profile = %s WHERE email = %s", (username, profile, email))
-            db.commit()
-            return jsonify({"message": "Profile mis à jour avec succès", "status": 200, "success": True})
-        elif username is not None:
-            cursor.execute(
-                "UPDATE User SET username = %s WHERE email = %s", (username, email))
-            db.commit()
-            return jsonify({"message": "Nom d'utilisateur mis à jour avec succès", "status": 200, "success": True})
-        elif profile is not None:
-            cursor.execute(
-                "UPDATE User SET profile = %s WHERE email = %s", (profile, email))
-            db.commit()
-            return jsonify({"message": "Profil mis à jour avec succès", "status": 200, "success": True})
-        else:
-            return jsonify({"message": "Aucune donnée à mettre à jour", "status": 400, "success": True})
-
-    # logout
-    @app.route('/logout', methods=['POST'])
-    def logout():
-        email = request.json.get('email', None)
-        token = request.json.get('token', None)
-        cursor = db.cursor()
+@app.route('/update_profile', methods=["POST"])
+def update_user():
+    username = request.json.get('username', None)
+    email = request.json.get('email', None)
+    profile = request.json.get('profile', None)
+    cursor = db.cursor()
+    if username is not None and profile is not None:
         cursor.execute(
+                "UPDATE User SET username = %s, profile = %s WHERE email = %s", (username, profile, email))
+        db.commit()
+        return jsonify({"message": "Profile mis à jour avec succès", "status": 200, "success": True})
+    elif username is not None:
+        cursor.execute(
+                "UPDATE User SET username = %s WHERE email = %s", (username, email))
+        db.commit()
+        return jsonify({"message": "Nom d'utilisateur mis à jour avec succès", "status": 200, "success": True})
+    elif profile is not None:
+        cursor.execute(
+                "UPDATE User SET profile = %s WHERE email = %s", (profile, email))
+        db.commit()
+        return jsonify({"message": "Profil mis à jour avec succès", "status": 200, "success": True})
+    else:
+        return jsonify({"message": "Aucune donnée à mettre à jour", "status": 400, "success": True})
+# logout
+@app.route('/logout', methods=['POST'])
+def logout():
+    email = request.json.get('email', None)
+    token = request.json.get('token', None)
+    cursor = db.cursor()
+    cursor.execute(
             "SELECT * FROM User WHERE email = %s AND token = %s", (email, token))
-        user = cursor.fetchone()
-        if user:
-            set_user_active(email, 0)
-            return jsonify({"message": "Déconnexion effectuée", "status": 200})
-        else:
-            return jsonify({"message": "Echec de déconnexion. Réessayez", "status": 404, "error": "User not found"})
+    user = cursor.fetchone()
+    if user:
+        set_user_active(email, 0)
+        return jsonify({"message": "Déconnexion effectuée", "status": 200})
+    else:
+        return jsonify({"message": "Echec de déconnexion. Réessayez", "status": 404, "error": "User not found"})
 ################# ------------- authentication end -------------#################
 
 
@@ -422,18 +424,53 @@ def get_all_posts_with_comments():
     cursor.execute("SELECT * FROM Posts")
     all_posts = cursor.fetchall()
     posts_with_comments = {}
-    for post in all_posts:
+    for index, post in enumerate(all_posts):
         post_id = post[0]
         cursor.execute(
             "SELECT * FROM Comments WHERE post_id = %s", (post_id,))
         comments = cursor.fetchall()
+        cursor.execute("SELECT username FROM User WHERE email = %s", (post[1],))
+        user = cursor.fetchone()
         post_comments = []
         for comment in comments:
+            cursor.execute("SELECT username FROM User WHERE email = %s", (comment[1],))
+            username = cursor.fetchone()[0]
             post_comments.append(
-                {"comment_id": comment[0], "comment_email": comment[1], "comments": comment[3], "created_at": comment[4]})
-        posts_with_comments["post"+str(post_id)] = {"post_id": post[0], "email": post[1], "post": post[2], "image_1": post[3],
-                                                    "image_2": post[4], "image_3": post[5], "created_at": post[6], "comments": post_comments}
+                {"comment_id": comment[0], "comment_email": comment[1], "comments": comment[3], "created_at": comment[4], "username":username, "profile":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBdsY5uiE1D7F8GpDOKneXIfRUBpKiZfGz5cgZdkkakA&s"})
+        posts_with_comments["post"+str(index+1)] = {"post_id": post[0], "email": post[1],"post": post[2], "created_at": post[6], "comments": post_comments, "pseudo": user[0], "profile":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBdsY5uiE1D7F8GpDOKneXIfRUBpKiZfGz5cgZdkkakA&s"}
     return jsonify({"success": True, "all_posts_with_comments": posts_with_comments, "status": 200, "total_posts": len(all_posts)})
+
+
+@app.route('/post_with_comments/<post_id>', methods=['GET'])
+def get_post_with_comments(post_id):
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM Posts WHERE id = %s", (post_id,))
+    post = cursor.fetchone()
+    if post:
+        cursor.execute("SELECT username FROM User WHERE email = %s", (post[1],))
+        user = cursor.fetchone()
+        cursor.execute("SELECT profile FROM User WHERE email = %s", (post[1],))
+        profile = cursor.fetchone()
+        cursor.execute("SELECT * FROM Comments WHERE post_id = %s", (post_id,))
+        comments = cursor.fetchall()
+        post_comments = []
+        for comment in comments:
+            cursor.execute("SELECT username FROM User WHERE email = %s", (comment[1],))
+            username = cursor.fetchone()[0]
+            cursor.execute("SELECT profile FROM User WHERE email = %s", (comment[1],))
+            profile_comment = cursor.fetchone()
+            img = ""
+            if not profile_comment[0]:
+                new_images = ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBdsY5uiE1D7F8GpDOKneXIfRUBpKiZfGz5cgZdkkakA&s", "https://www.bapabxl.be/uploads/img/modules/team/1677677491_Site%20internet%20(2).png"]
+                imag = random.choice(new_images)
+            else:
+                imag = profile_comment[0]
+            post_comments.append(
+                {"comment_id": comment[0], "comment_email": comment[1], "comments": comment[3], "created_at": comment[4], "username":username, "profile":imag})
+        return jsonify({"success": True, "post_with_comments": {"post_id": post[0], "email": post[1], "post": post[2], "created_at": post[6], "comments": post_comments, "pseudo": user[0], "profile": profile[0]}, "status": 200})
+    else:
+        return jsonify({"success": False, "message": "Post not found", "status": 404})
+
 ################# ------------- Posts end -------------#################
 
 

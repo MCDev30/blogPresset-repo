@@ -1,6 +1,15 @@
 <script setup>
-// import HelloWorld from './components/HelloWorld.vue'
-//import test from "./constant/index";
+import { ref } from 'vue';
+import base_url from '../../../constant';
+const email = ref('')
+const step2 = () => {
+  if (email.value !== "") {
+    sessionStorage.setItem('password_email', email.value)
+    window.location.replace("/reset_password/step2")
+  } else{
+    alert("Veuillez renseigner votre email")
+  }
+}
 </script>
 
 <template>
@@ -23,14 +32,14 @@
               <br/><br />
               <div class="group">
                 <label for="user" class="label">Email</label>
-                <input id="user" type="email" class="input" />
+                <input id="user" type="email" class="input" v-model="email" />
               </div>
 
 
               </div>
               <br /><br />
               <div class="group">
-                <input type="submit" class="button" value="Next" />
+                <input type="submit" class="button" value="Next" @click="step2" />
               </div>
               <div class="hr"></div>
               <div class="foot-lnk">

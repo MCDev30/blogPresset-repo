@@ -24,6 +24,7 @@ const logout = async () => {
     const jsonResponse = await response.json();
     if (jsonResponse.status === 200) {
       sessionStorage.clear()
+      localStorage.clear()
       error.value = jsonResponse.message
       window.location.replace('/')
     } else {
@@ -55,23 +56,11 @@ const logout = async () => {
             <img src="../assets/home.png" alt="" width="25" />
           </li>
         </router-link>
-
-        <router-link to="/">
-          <li :class="[act == 2 ? 'activ' : '']">
-            <img src="../assets/cloche.png" alt="" width="25" />
-          </li>
-        </router-link>
-
-        <router-link to="/profile">
-          <li :class="[act == 3 ? 'activ' : '']">
-            <img src="../assets/utilisateur.png" alt="" width="25" />
-          </li>
-        </router-link>
       </ul>
     </div>
 
     <div class="separator"></div>
-    <router-link to="/">
+    <router-link to="/dashboard">
       <div class="dashboard">
         <img src="../assets/tableau-de-bord.png" alt="" width="30" />
       </div>

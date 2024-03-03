@@ -2,6 +2,16 @@
 
 - Demo link: 
 
+- Visualisation
+![Image 1](/demo/01.png)
+![Image 2](/demo/02.png)
+![Image 3](/demo/03.png)
+![Image 4](/demo/04.png)
+![Image 5](/demo/05.png)
+
+
+- Video Demo: [Link to video demo](/demo/demo.mov)
+
 # Frontend --- BlogPresset folder
 
 BlogPresset is a web application that allows users to create and share blog posts. It provides functionalities for creating, updating, and deleting posts, as well as adding, updating, and deleting comments on posts.
@@ -69,7 +79,7 @@ This API is built using Flask and MySQL for a simple blogging platform called Bl
 - `/login` - POST - Login with JWT authentication
 - `/update_profile` - PUT - Update user profile
 - `/delete_user_account` - DELETE - Deactivate user account
-- `/create_post` - POST - Create a new post
+- `/add_post` - POST - Create a new post
 - `/update_post/<post_id>` - PUT - Update a post
 - `/delete_post/<post_id>` - DELETE - Delete a post
 - `/add_comments/<email>/<post_id>` - POST - Add comments to a post

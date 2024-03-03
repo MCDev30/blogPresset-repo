@@ -13,7 +13,7 @@
     </div>
     <hr />
     <p style="height:2px"></p>
-    <div class="lastPost" v-for="post in data" :key="post.id">
+    <!-- <div class="lastPost" v-for="post in data" :key="post.id">
       <div class="post">
         <p id="post">{{ post.post }}</p>
         <div class="like">
@@ -27,22 +27,25 @@
         </div>
       </div>
     </div>
-    <hr />
+    <hr /> -->
     <div class="buttons">
-      <router-link to="/profile">
+      <!-- <router-link to="/profile">
         <div class="update">
           <img src="../../assets/update.png" alt="" width="17" />
           <p>Update profile</p>
         </div>
-      </router-link>
+      </router-link> -->
       <div class="addPost" data-toggle="modal" data-target="#addPost">
         <img src="../../assets/plus.png" alt="" width="17" />
         <p>Add new post</p>
       </div>
+      <!-- <div class="addPost" @click="setAll">
+        <p>{{ view }}</p>
+      </div> -->
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="addPost" tabindex="-1" role="dialog" aria-labelledby="addPostCentertitre" aria-hidden="true">
+    <div class="modal fade" id="addPost" tabindex="-1" role="dialog" aria-labelledby="addPostCentertitre" aria-hidden="true" ref="addPostModal">
 
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content" >
@@ -52,7 +55,7 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div v-if="message !== ''" class="alert alert-warning alert-dismissible fade show" role="alert">
+          <div v-if="message !== ''" class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>{{ message }}</strong>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -61,9 +64,9 @@
           <div class="modal-body">
             <div class="postArea">
               <p style="font-size:13px; margin-bottom:0px">Your article here</p>
-              <textarea id="tArea" rows="7" v-model="post"></textarea>
+              <textarea id="tArea" rows="10" v-model="post"></textarea>
             </div>
-            <div class="imageFac">
+            <!-- <div class="imageFac">
               <div id="app" class="container my-3">
                 <div class="row">
                   <div>
@@ -89,7 +92,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
 
 
@@ -125,9 +128,11 @@ export default {
       token : sessionStorage.getItem('token'),
       profile : sessionStorage.getItem('profile'),
       citation : sessionStorage.getItem('citation'),
-      message :""
+      message :"",
+      view:"View all posts"
     };
   },
+
   methods: {
     previewMultiImage: function(event) {
       var input = event.target;
@@ -152,41 +157,40 @@ export default {
       this.preview_list = [];
     },
     addPost:function() {
-      const images = []
-      this.preview_list.forEach(image => {
-        images.push(image)
-      });
-      if (images.length > 3) {
-        this.message = "Sélectionnez au plus 3 images !"
-        this.reset()
-      } else{
         const data = {
           email:sessionStorage.getItem('email'),
-          post: this.post,
-          image_list: images,
+          post: this.post
         };
         const options = {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          // body: JSON.stringify(data),
+          body: JSON.stringify(data),
         };
-        fetch(`${this.base_url}/posts/${data.email}`, options)
+        fetch(`${this.base_url}/add-posts`, options)
         .then(response => response.json())
         .then(jsonData => {
-          console.log(images[0]);
-          console.log(jsonData); 
+          if (jsonData.success) {
+            this.message = jsonData.message
+            console.log(jsonData); 
+            // this.$refs.addPostModal.hide();
+            window.location.reload()
+          }
         })
         .catch(error => {
           console.log('Error:', error);
-          console.log(data);
-
+          this.message = jsonData.message
         });
+      },
+      setAll: function() {
+        if(localStorage.getItem('view_all') !== null) {
+          localStorage.getItem('view_all') === 'true' ? localStorage.setItem('view_all', 'false') : localStorage.setItem('view_all', 'true');
+          window.location.reload()
+        }
       }
     }
   }
-}
 
 </script>
 

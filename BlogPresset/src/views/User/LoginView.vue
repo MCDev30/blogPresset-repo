@@ -16,9 +16,11 @@ const isTrue = ref("none")
 const register = async () => {
   const data = {
     username:reg_username.value,
-    password: log_password.value,
+    password: reg_password.value,
     email: reg_email.value,
   };
+
+  console.log(data)
   const options = {
     method: "POST",
     headers: {
@@ -36,6 +38,7 @@ const register = async () => {
     try {
       const response = await fetch(`${base_url}/register`, options);
       const jsonResponse = await response.json();
+      
       if (jsonResponse.success) {
         isTrue.value = "success"
         message.value = jsonResponse.message
