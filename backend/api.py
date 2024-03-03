@@ -9,7 +9,13 @@ app = Flask(__name__)
 CORS(app)
 jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = "oxRJONF-qPdcIHDM-ZMBxrGIg-qOJfyNB"
-
+    
+# db = mysql.connector.connect(
+#     host="Charbelozeus.mysql.pythonanywhere-services.com",
+#     user="Charbelozeus",
+#     password="blogpresset",
+#     database="Charbelozeus$BlogPresset"
+# )
 
 ################# ------------- Model start -------------#################
 def create_user_table(db):
@@ -529,6 +535,7 @@ if __name__ == "__main__":
         password="root",
         database="BlogPresset"
     )
+
     create_user_table(db=db)
     create_posts_table(db=db)
     create_comments_table(db=db)
