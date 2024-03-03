@@ -77,7 +77,7 @@ const login = async () => {
       sessionStorage.setItem('username', jsonResponse.user.username)
       sessionStorage.setItem('profile', jsonResponse.user.profile)
       sessionStorage.setItem('citation', jsonResponse.user.citation)
-      window.location.href('/home')
+      window.location.href = '/home'
     } else {
       isTrue.value = "danger"
       message.value = jsonResponse.message
