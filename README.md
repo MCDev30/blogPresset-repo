@@ -1,6 +1,6 @@
 # BlogPresset
 
-- Demo link: [https://blogpresset.vercel.app/](https://blogpresset.vercel.app/)
+- Demo link: [https://blog-presset.vercel.app/](https://blog-presset.vercel.app/)
 
 - Visualisation
 ![Image 1](/demo/01.png)
