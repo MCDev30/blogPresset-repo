@@ -25,7 +25,7 @@ const logout = async () => {
     if (jsonResponse.status === 200) {
       sessionStorage.clear();
       localStorage.clear();
-      window.location.replace("/");
+      window.location.href = "/";
     }
   } catch (error) {
     console.error("Erreur lors de la requête :", error);
@@ -99,7 +99,7 @@ const deleteAccount = () => {
     .then((response) => {
       if (response.ok) {
         alert("Account deleted successfully");
-        window.location.replace("/");
+        window.location.href = "/";
       } else {
         alert("Failed to delete account. Try again !!");
       }

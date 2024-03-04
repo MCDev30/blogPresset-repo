@@ -5,7 +5,7 @@ const email = ref('')
 const step2 = () => {
   if (email.value !== "") {
     sessionStorage.setItem('password_email', email.value)
-    window.location.replace("/reset_password/step2")
+    window.location.href = "/reset_password/step2"
   } else{
     alert("Veuillez renseigner votre email")
   }

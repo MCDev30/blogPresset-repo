@@ -42,7 +42,7 @@ const register = async () => {
       if (jsonResponse.success) {
         isTrue.value = "success"
         message.value = jsonResponse.message
-        window.location.replace('/')
+        window.location.href = '/'
       } else {
         isTrue.value = "danger"
         message.value = jsonResponse.message

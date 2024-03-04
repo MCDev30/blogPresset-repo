@@ -20,7 +20,7 @@ const setPass = () => {
       const jsonResponse = await response.json();
       if (jsonResponse.success) {
         alert(jsonResponse.message)
-        window.location.replace('/')
+        window.location.href = '/'
       }
     } catch (error) {
       console.error("Error during request:", error);

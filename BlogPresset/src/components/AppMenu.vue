@@ -26,7 +26,7 @@ const logout = async () => {
       sessionStorage.clear()
       localStorage.clear()
       error.value = jsonResponse.message
-      window.location.replace('/')
+      window.location.href = '/'
     } else {
       error.value = jsonResponse.message
     }
