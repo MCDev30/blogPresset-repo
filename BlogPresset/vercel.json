@@ -1,8 +1,10 @@
 {
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "/"
-        }
-    ]
+  "routes": [
+    { "src": "/", "dest": "/" },
+    { "src": "/home", "dest": "/" },
+    { "src": "/reset_password/step1", "dest": "/" },
+    { "src": "/reset_password/step3", "dest": "/" },
+    { "src": "/reset_password/step2", "dest": "/" },
+    { "src": "/dashboard", "dest": "/" }
+  ]
 }
